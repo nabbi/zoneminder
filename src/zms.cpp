@@ -24,7 +24,6 @@
 #include "zm_monitorstream.h"
 #include "zm_eventstream.h"
 #include "zm_fifo_stream.h"
-#include <csignal>
 #include <iomanip>
 #include <sstream>
 #include <string>
@@ -277,10 +276,6 @@ int main(int argc, const char *argv[], char **envp) {
   Image::Initialise();
   zmSetDefaultTermHandler();
   zmSetDefaultDieHandler();
-  // Ignore SIGPIPE so broken HTTP connections return EPIPE from write()
-  // instead of killing the process. Without this, the 5-second keepalive
-  // gap after event end causes zms to die on the next stdout write.
-  std::signal(SIGPIPE, SIG_IGN);
 
   setbuf(stdout, nullptr);
   if ( nph ) {
