@@ -1,0 +1,306 @@
+<mxfile host="draw.io" modified="2026-02-10T00:00:00.000Z" agent="Claude" version="22.0.0">
+  <diagram id="zmaudit-zmstats-overlap" name="zmaudit vs zmstats Overlap">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Title -->
+        <mxCell id="title1" value="&lt;b&gt;zmstats.pl vs zmaudit.pl: Responsibilities and Overlap&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="600" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- zmstats box -->
+        <mxCell id="zmstats_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=0;opacity=80;" vertex="1" parent="1">
+          <mxGeometry x="60" y="80" width="460" height="440" as="geometry"/>
+        </mxCell>
+        <mxCell id="zmstats_title" value="&lt;b&gt;zmstats.pl&lt;/b&gt;&lt;br&gt;Interval: ZM_STATS_UPDATE_INTERVAL (~5s)&lt;br&gt;Startup delay: 30s" style="text;html=1;align=center;verticalAlign=top;fontSize=13;fontColor=#1a3d6e;" vertex="1" parent="1">
+          <mxGeometry x="80" y="90" width="420" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- zmstats responsibilities -->
+        <mxCell id="zs1" value="Collect CPU / Memory / Swap stats" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="80" y="160" width="250" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="zs2" value="INSERT INTO Server_Stats" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="80" y="200" width="250" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="zs3" value="UPDATE Servers (resource usage)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="80" y="240" width="250" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="zs4" value="&lt;b&gt;DELETE expired from Events_Hour&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="290" width="250" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="zs5" value="&lt;b&gt;DELETE expired from Events_Day&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="80" y="325" width="250" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="zs6" value="&lt;b&gt;DELETE expired from Events_Week&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="80" y="360" width="250" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="zs7" value="&lt;b&gt;DELETE expired from Events_Month&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="80" y="395" width="250" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="zs8" value="DELETE old Monitor_Status rows" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="80" y="440" width="250" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="zs9" value="DELETE old Server_Stats rows" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="80" y="475" width="250" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- zmaudit box -->
+        <mxCell id="zmaudit_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;dashed=0;opacity=80;" vertex="1" parent="1">
+          <mxGeometry x="540" y="80" width="520" height="440" as="geometry"/>
+        </mxCell>
+        <mxCell id="zmaudit_title" value="&lt;b&gt;zmaudit.pl&lt;/b&gt;&lt;br&gt;Interval: ZM_AUDIT_CHECK_INTERVAL (~900s / 15min)&lt;br&gt;Modes: --continuous, --report, --interactive" style="text;html=1;align=center;verticalAlign=top;fontSize=13;fontColor=#6e1a1a;" vertex="1" parent="1">
+          <mxGeometry x="560" y="90" width="480" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- zmaudit responsibilities -->
+        <mxCell id="za1" value="Filesystem &lt;--&gt; DB event cross-reference" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="740" y="160" width="300" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="za2" value="Recover orphaned events from disk" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="740" y="200" width="300" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="za3" value="Validate frame counts and DiskSpace" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="740" y="240" width="300" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="za4" value="&lt;b&gt;Recalculate Event_Summaries.HourEvents&lt;/b&gt;&lt;br&gt;(from Events_Hour via INNER JOIN -- BUG)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="740" y="290" width="300" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="za5" value="&lt;b&gt;Recalculate Event_Summaries.DayEvents&lt;/b&gt;&lt;br&gt;(from Events_Day via INNER JOIN -- BUG)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="740" y="335" width="300" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="za6" value="&lt;b&gt;Recalculate Event_Summaries.WeekEvents&lt;/b&gt;&lt;br&gt;(from Events_Week via INNER JOIN -- BUG)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="740" y="380" width="300" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="za7" value="&lt;b&gt;Recalculate Event_Summaries.MonthEvents&lt;/b&gt;&lt;br&gt;(from Events_Month via INNER JOIN -- BUG)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="740" y="425" width="300" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="za8" value="Recalculate TotalEvents, ArchivedEvents&lt;br&gt;(from Events table -- works correctly)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="740" y="475" width="300" height="35" as="geometry"/>
+        </mxCell>
+
+        <!-- Overlap zone - shared concern arrows -->
+        <mxCell id="overlap_label" value="&lt;b&gt;SHARED CONCERN&lt;/b&gt;&lt;br&gt;Events_Hour/Day/Week/Month&lt;br&gt;&lt;br&gt;zmstats PRUNES rows&lt;br&gt;zmaudit READS rows to recalculate&lt;br&gt;&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;BUG: zmaudit's INNER JOIN&lt;br&gt;skips monitors with 0 rows&lt;br&gt;after zmstats prunes them&lt;/font&gt;" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=center;" vertex="1" parent="1">
+          <mxGeometry x="400" y="280" width="260" height="180" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrows from zmstats to overlap -->
+        <mxCell id="arrow_zs_overlap" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#d6b656;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="zs4" target="overlap_label">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <!-- Arrows from overlap to zmaudit -->
+        <mxCell id="arrow_overlap_za" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#d6b656;strokeWidth=2;endArrow=classic;" edge="1" parent="1" source="overlap_label" target="za4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Overlap zone label: also shared LOG pruning -->
+        <mxCell id="shared_logs" value="&lt;i&gt;Also shared:&lt;br&gt;LOG_DATABASE_LIMIT enforcement&lt;/i&gt;" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="400" y="480" width="260" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="leg_title" value="&lt;b&gt;Legend&lt;/b&gt;" style="text;html=1;align=left;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="90" width="100" height="25" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg1" value="" style="rounded=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="120" width="20" height="15" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg1t" value="zmstats-only task" style="text;html=1;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="117" width="140" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg2" value="" style="rounded=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="145" width="20" height="15" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg2t" value="zmaudit-only task" style="text;html=1;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="142" width="140" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg3" value="" style="rounded=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="170" width="20" height="15" as="geometry"/>
+        </mxCell>
+        <mxCell id="leg3t" value="Shared / overlapping concern" style="text;html=1;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="167" width="180" height="20" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram id="data-flow-timeline" name="Data Flow and Bug Timeline">
+    <mxGraphModel dx="1422" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Title -->
+        <mxCell id="title2" value="&lt;b&gt;Event Summary Data Flow: How the Stale Count Bug Manifests&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="300" y="10" width="700" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- === ROW 1: Event Creation === -->
+        <mxCell id="phase1_label" value="&lt;b&gt;Phase 1: Event Creation&lt;/b&gt;&lt;br&gt;(C++ daemon, real-time)" style="text;html=1;align=right;fontSize=11;fontColor=#1a5e1a;" vertex="1" parent="1">
+          <mxGeometry x="20" y="70" width="180" height="40" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="zmc" value="&lt;b&gt;zmc/zma&lt;/b&gt;&lt;br&gt;(C++ capture/analysis)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="220" y="60" width="160" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="events_tbl" value="&lt;b&gt;Events&lt;/b&gt; table&lt;br&gt;(permanent record)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="440" y="55" width="120" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="events_hour_tbl" value="&lt;b&gt;Events_Hour&lt;/b&gt;&lt;br&gt;(time-window cache)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="600" y="55" width="130" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="event_summaries_tbl" value="&lt;b&gt;Event_Summaries&lt;/b&gt;&lt;br&gt;(counter cache)&lt;br&gt;HourEvents += 1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="780" y="55" width="150" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="arr1a" value="INSERT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeWidth=2;strokeColor=#82b366;fontSize=9;" edge="1" parent="1" source="zmc" target="events_tbl">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arr1b" value="INSERT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeWidth=2;strokeColor=#d6b656;fontSize=9;" edge="1" parent="1" source="zmc" target="events_hour_tbl">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arr1c" value="UPSERT +1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeWidth=2;strokeColor=#b85450;fontSize=9;" edge="1" parent="1" source="zmc" target="event_summaries_tbl">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- === ROW 2: zmstats prune === -->
+        <mxCell id="phase2_label" value="&lt;b&gt;Phase 2: Pruning&lt;/b&gt;&lt;br&gt;(zmstats, every ~5s)" style="text;html=1;align=right;fontSize=11;fontColor=#1a3d6e;" vertex="1" parent="1">
+          <mxGeometry x="20" y="170" width="180" height="40" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="zmstats" value="&lt;b&gt;zmstats.pl&lt;/b&gt;&lt;br&gt;(~5s interval)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="220" y="165" width="160" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="events_hour_tbl2" value="&lt;b&gt;Events_Hour&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;DELETE WHERE &gt; 1hr old&lt;/font&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="600" y="155" width="130" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="event_summaries_tbl2" value="&lt;b&gt;Event_Summaries&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;NOT TOUCHED!&lt;/font&gt;&lt;br&gt;HourEvents still = 1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="780" y="155" width="150" height="65" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="arr2a" value="DELETE old rows" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeWidth=2;strokeColor=#cc0000;fontSize=9;" edge="1" parent="1" source="zmstats" target="events_hour_tbl2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arr2b" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeWidth=1;strokeColor=#999999;dashed=1;fontSize=9;endArrow=none;" edge="1" parent="1" source="zmstats" target="event_summaries_tbl2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset"/>
+            <Array as="points">
+              <mxPoint x="500" y="190"/>
+              <mxPoint x="500" y="250"/>
+              <mxPoint x="855" y="250"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="no_touch_label" value="&lt;font color=&quot;#999999&quot;&gt;&lt;i&gt;(no update)&lt;/i&gt;&lt;/font&gt;" style="text;html=1;align=center;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="475" y="238" width="80" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- === ROW 3: zmaudit recalculate === -->
+        <mxCell id="phase3_label" value="&lt;b&gt;Phase 3: Recalculation&lt;/b&gt;&lt;br&gt;(zmaudit, every ~15min)" style="text;html=1;align=right;fontSize=11;fontColor=#6e1a1a;" vertex="1" parent="1">
+          <mxGeometry x="20" y="290" width="180" height="40" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="zmaudit" value="&lt;b&gt;zmaudit.pl&lt;/b&gt;&lt;br&gt;(~15min interval)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="220" y="285" width="160" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="events_hour_tbl3" value="&lt;b&gt;Events_Hour&lt;/b&gt;&lt;br&gt;0 rows for this monitor&lt;br&gt;(already pruned)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="600" y="275" width="130" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="event_summaries_tbl3" value="&lt;b&gt;Event_Summaries&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;&lt;b&gt;SKIPPED by INNER JOIN!&lt;/b&gt;&lt;/font&gt;&lt;br&gt;HourEvents still = 1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="780" y="270" width="150" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="arr3a" value="SELECT COUNT(*)&lt;br&gt;GROUP BY MonitorId" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeWidth=2;strokeColor=#b85450;fontSize=9;" edge="1" parent="1" source="zmaudit" target="events_hour_tbl3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arr3b_bug" value="&lt;font color=&quot;#cc0000&quot;&gt;&lt;b&gt;INNER JOIN = no match&lt;br&gt;monitor SKIPPED&lt;/b&gt;&lt;/font&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeWidth=3;strokeColor=#cc0000;dashed=1;fontSize=9;endArrow=cross;endFill=0;" edge="1" parent="1" source="events_hour_tbl3" target="event_summaries_tbl3">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- === ROW 4: Console display === -->
+        <mxCell id="phase4_label" value="&lt;b&gt;Phase 4: User Views Console&lt;/b&gt;&lt;br&gt;(PHP, on demand)" style="text;html=1;align=right;fontSize=11;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="20" y="410" width="180" height="40" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="console_php" value="&lt;b&gt;web/ajax/console.php&lt;/b&gt;&lt;br&gt;(reads cached count)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="220" y="400" width="160" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="event_summaries_tbl4" value="&lt;b&gt;Event_Summaries&lt;/b&gt;&lt;br&gt;HourEvents = &lt;font color=&quot;#cc0000&quot;&gt;&lt;b&gt;1 (STALE!)&lt;/b&gt;&lt;/font&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="780" y="395" width="150" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="browser1" value="Console shows&lt;br&gt;&lt;b&gt;&lt;font style=&quot;font-size:16px&quot; color=&quot;#cc0000&quot;&gt;1&lt;/font&gt;&lt;/b&gt;" style="shape=mxgraph.mockup.containers.browserWindow;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=10;mainText=;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="385" width="160" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="arr4a" value="LEFT JOIN" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeWidth=2;strokeColor=#666666;fontSize=9;" edge="1" parent="1" source="console_php" target="event_summaries_tbl4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arr4b" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeWidth=2;strokeColor=#666666;fontSize=9;" edge="1" parent="1" source="event_summaries_tbl4" target="browser1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- === ROW 5: User clicks === -->
+        <mxCell id="phase5_label" value="&lt;b&gt;Phase 5: User Clicks Count&lt;/b&gt;&lt;br&gt;(PHP, live query)" style="text;html=1;align=right;fontSize=11;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="20" y="520" width="180" height="40" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="events_php" value="&lt;b&gt;Events view&lt;/b&gt;&lt;br&gt;FilterTerm: strtotime('-1 hour')&lt;br&gt;queries Events table directly" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="220" y="510" width="220" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="events_tbl5" value="&lt;b&gt;Events&lt;/b&gt; table&lt;br&gt;WHERE StartDateTime&lt;br&gt;&gt;= NOW()-1hr&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;&lt;b&gt;0 rows match&lt;/b&gt;&lt;/font&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="600" y="505" width="130" height="75" as="geometry"/>
+        </mxCell>
+        <mxCell id="browser2" value="Events view shows&lt;br&gt;&lt;b&gt;&lt;font style=&quot;font-size:16px&quot; color=&quot;#cc0000&quot;&gt;No events found&lt;/font&gt;&lt;/b&gt;" style="shape=mxgraph.mockup.containers.browserWindow;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=10;mainText=;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="505" width="190" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="arr5a" value="SELECT WHERE&lt;br&gt;StartDateTime &gt;= ..." style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeWidth=2;strokeColor=#666666;fontSize=9;" edge="1" parent="1" source="events_php" target="events_tbl5">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="arr5b" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeWidth=2;strokeColor=#666666;fontSize=9;" edge="1" parent="1" source="events_tbl5" target="browser2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Mismatch callout -->
+        <mxCell id="mismatch" value="&lt;font color=&quot;#cc0000&quot; style=&quot;font-size:14px&quot;&gt;&lt;b&gt;MISMATCH&lt;/b&gt;&lt;/font&gt;&lt;br&gt;Cached count = 1&lt;br&gt;Live query = 0" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=20;position=0.5;base=15;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="430" width="150" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Fix callout -->
+        <mxCell id="fix_box" value="&lt;b&gt;FIX (Option B):&lt;/b&gt;&lt;br&gt;Change INNER JOIN to LEFT JOIN&lt;br&gt;+ COALESCE(..., 0) in Phase 3&lt;br&gt;&lt;br&gt;Monitors with 0 rows in Events_Hour&lt;br&gt;will correctly get HourEvents = 0" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;strokeWidth=2;align=center;" vertex="1" parent="1">
+          <mxGeometry x="220" y="630" width="350" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- Time axis -->
+        <mxCell id="time_arrow" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#333333;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1400" y="60" as="sourcePoint"/>
+            <mxPoint x="1400" y="600" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="time_label" value="&lt;b&gt;TIME&lt;/b&gt;" style="text;html=1;align=center;fontSize=12;rotation=-90;" vertex="1" parent="1">
+          <mxGeometry x="1390" y="300" width="60" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="t0" value="T+0:00" style="text;html=1;align=right;fontSize=10;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1410" y="75" width="50" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="t1" value="T+1:01" style="text;html=1;align=right;fontSize=10;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1410" y="180" width="50" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="t2" value="T+1:15" style="text;html=1;align=right;fontSize=10;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1410" y="300" width="50" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="t3" value="T+1:16" style="text;html=1;align=right;fontSize=10;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1410" y="420" width="50" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="t4" value="T+1:17" style="text;html=1;align=right;fontSize=10;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1410" y="530" width="50" height="20" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
