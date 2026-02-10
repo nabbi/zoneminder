@@ -900,46 +900,46 @@ FROM `Frames` WHERE `EventId`=?';
   aud_print('Finished updating TotalEvents, ArchivedEvents');
 
   my $eventcounts_hour_sql = '
-  UPDATE `Event_Summaries` INNER JOIN (
+  UPDATE `Event_Summaries` LEFT JOIN (
   SELECT  `MonitorId`, COUNT(*) AS `HourEvents`, SUM(COALESCE(`DiskSpace`,0)) AS `HourEventDiskSpace`
   FROM `Events_Hour` GROUP BY `MonitorId`
   ) AS `E` ON `E`.`MonitorId`=`Event_Summaries`.`MonitorId` SET
-  `Event_Summaries`.`HourEvents` = `E`.`HourEvents`,
-  `Event_Summaries`.`HourEventDiskSpace` = `E`.`HourEventDiskSpace`
+  `Event_Summaries`.`HourEvents` = COALESCE(`E`.`HourEvents`, 0),
+  `Event_Summaries`.`HourEventDiskSpace` = COALESCE(`E`.`HourEventDiskSpace`, 0)
   ';
   ZoneMinder::Database::zmDbDo($eventcounts_hour_sql);
   aud_print("Finished updating HourEvents");
 
 
   my $eventcounts_day_sql = '
-  UPDATE `Event_Summaries` INNER JOIN (
+  UPDATE `Event_Summaries` LEFT JOIN (
   SELECT  `MonitorId`, COUNT(*) AS `DayEvents`, SUM(COALESCE(`DiskSpace`,0)) AS `DayEventDiskSpace`
   FROM `Events_Day` GROUP BY `MonitorId`
   ) AS `E` ON `E`.`MonitorId`=`Event_Summaries`.`MonitorId` SET
-  `Event_Summaries`.`DayEvents` = `E`.`DayEvents`,
-  `Event_Summaries`.`DayEventDiskSpace` = `E`.`DayEventDiskSpace`
+  `Event_Summaries`.`DayEvents` = COALESCE(`E`.`DayEvents`, 0),
+  `Event_Summaries`.`DayEventDiskSpace` = COALESCE(`E`.`DayEventDiskSpace`, 0)
   ';
   ZoneMinder::Database::zmDbDo($eventcounts_day_sql);
   aud_print("Finished updating DayEvents");
 
   my $eventcounts_week_sql = '
-  UPDATE `Event_Summaries` INNER JOIN (
+  UPDATE `Event_Summaries` LEFT JOIN (
   SELECT  `MonitorId`, COUNT(*) AS `WeekEvents`, SUM(COALESCE(`DiskSpace`,0)) AS `WeekEventDiskSpace`
   FROM `Events_Week` GROUP BY `MonitorId`
   ) AS `E` ON `E`.`MonitorId`=`Event_Summaries`.`MonitorId` SET
-  `Event_Summaries`.`WeekEvents` = `E`.`WeekEvents`,
-  `Event_Summaries`.`WeekEventDiskSpace` = `E`.`WeekEventDiskSpace`
+  `Event_Summaries`.`WeekEvents` = COALESCE(`E`.`WeekEvents`, 0),
+  `Event_Summaries`.`WeekEventDiskSpace` = COALESCE(`E`.`WeekEventDiskSpace`, 0)
   ';
   ZoneMinder::Database::zmDbDo($eventcounts_week_sql);
   aud_print("Finished updating WeekEvents");
 
   my $eventcounts_month_sql = '
-  UPDATE `Event_Summaries` INNER JOIN (
+  UPDATE `Event_Summaries` LEFT JOIN (
   SELECT  `MonitorId`, COUNT(*) AS `MonthEvents`, SUM(COALESCE(`DiskSpace`,0)) AS `MonthEventDiskSpace`
   FROM `Events_Month` GROUP BY `MonitorId`
   ) AS `E` ON `E`.`MonitorId`=`Event_Summaries`.`MonitorId` SET
-  `Event_Summaries`.`MonthEvents` = `E`.`MonthEvents`,
-  `Event_Summaries`.`MonthEventDiskSpace` = `E`.`MonthEventDiskSpace`
+  `Event_Summaries`.`MonthEvents` = COALESCE(`E`.`MonthEvents`, 0),
+  `Event_Summaries`.`MonthEventDiskSpace` = COALESCE(`E`.`MonthEventDiskSpace`, 0)
   ';
   ZoneMinder::Database::zmDbDo($eventcounts_month_sql);
   aud_print("Finished updating MonthEvents");
