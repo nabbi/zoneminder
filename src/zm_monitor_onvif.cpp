@@ -348,6 +348,7 @@ bool ONVIF::InitSoapContext() {
 }
 
 void ONVIF::Subscribe() {
+  stat_subscribes++;
   // Drop any prior subscription on the camera and reopen the TCP connection.
   // Cameras typically cap pull-point subscriptions per user and only release
   // the slot when the originating socket closes; reusing soap here leaks slots
@@ -540,6 +541,7 @@ void ONVIF::WaitForMessage() {
 
   if (use_wsa) {
     if (!do_wsa_request(subscription_address_.c_str(), "PullPointSubscription/PullMessagesRequest")) {
+      stat_wsa_fail++;
       return;
     }
   } else {
@@ -556,6 +558,12 @@ void ONVIF::WaitForMessage() {
   auto pull_start = std::chrono::steady_clock::now();
   int result = proxyEvent.PullMessages(subscription_address_.c_str(), nullptr, &tev__PullMessages, tev__PullMessagesResponse);
   auto pull_elapsed = std::chrono::steady_clock::now() - pull_start;
+  stat_pulls++;
+  if (result == SOAP_OK) {
+    stat_messages += tev__PullMessagesResponse.wsnt__NotificationMessage.size();
+  } else if (soap->error != SOAP_EOF) {
+    stat_failures++;
+  }
   bool empty_poll = (result == SOAP_OK) ? tev__PullMessagesResponse.wsnt__NotificationMessage.empty()
                                         : (soap->error == SOAP_EOF);
     if (result != SOAP_OK) {
@@ -821,6 +829,10 @@ void ONVIF::WaitForMessage() {
       if (IsRenewalNeeded()) Renew();
     }  // end if SOAP OK/NOT OK
 
+  {
+    std::unique_lock<std::mutex> lck(alarms_mutex);
+    stat_alarms = alarms.size();
+  }
   // Clean up gSOAP allocated memory from PullMessages response
   // This must be called after every SOAP operation to prevent memory growth
   soap_destroy(soap);

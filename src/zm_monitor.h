@@ -808,6 +808,11 @@ class Monitor : public std::enable_shared_from_this<Monitor> {
   int64_t KeepDtsContinuous(AVPacket *packet, AVRational time_base);
   std::unique_ptr<PollThread> Poller;
   std::list<ZMPacketLock> decoder_queue;
+  // triage-4860: decoder_queue.size() as of the decoder thread's last Decode() call,
+  // and when UpdateFPS() last logged the stats line.
+  std::atomic<size_t> decoder_queue_size_{0};
+  SystemTimePoint last_triage_stats_time_;
+  void LogTriageStats();
   // The decoder_queue entry a decoded frame with this pts came from; releases
   // the entries before it that the codec consumed without returning a frame.
   std::list<ZMPacketLock>::iterator MatchDecodedFrame(int64_t frame_pts);

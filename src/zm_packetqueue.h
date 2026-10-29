@@ -78,6 +78,8 @@ class PacketQueue {
   void clear();
   void dumpQueue();
   unsigned int size();
+  // triage-4860: one-line summary of what the queue holds, for the periodic stats line.
+  std::string stats();
   unsigned int get_packet_count(int stream_id) const { return packet_counts[stream_id]; };
   bool has_out_of_order_packets() {
     std::unique_lock<std::mutex> lck(mutex);

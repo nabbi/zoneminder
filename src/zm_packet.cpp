@@ -28,6 +28,7 @@ extern "C" {
 
 using namespace std;
 AVPixelFormat target_format = AV_PIX_FMT_NONE;
+std::atomic<int> ZMPacket::live_count{0};
 
 ZMPacket::ZMPacket() :
   locked(false),
@@ -45,6 +46,7 @@ ZMPacket::ZMPacket() :
   decoded(false),
   analyzed(false) {
   packet = av_packet_ptr{av_packet_alloc()};
+  live_count++;
 }
 
 ZMPacket::ZMPacket(Image *i, SystemTimePoint tv) :
@@ -64,6 +66,7 @@ ZMPacket::ZMPacket(Image *i, SystemTimePoint tv) :
   decoded(false),
   analyzed(false) {
   packet = av_packet_ptr{av_packet_alloc()};
+  live_count++;
 }
 
 ZMPacket::ZMPacket(ZMPacket &p) :
@@ -83,6 +86,7 @@ ZMPacket::ZMPacket(ZMPacket &p) :
   decoded(p.decoded),
   analyzed(p.analyzed) {
   packet = av_packet_ptr{av_packet_alloc()};
+  live_count++;
 
   if (av_packet_ref(packet.get(), p.packet.get()) < 0) {
     Error("error refing packet");
@@ -90,6 +94,7 @@ ZMPacket::ZMPacket(ZMPacket &p) :
 }
 
 ZMPacket::~ZMPacket() {
+  live_count--;
   delete analysis_image;
   delete image;
   delete y_image;

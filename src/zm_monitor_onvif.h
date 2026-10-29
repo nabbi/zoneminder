@@ -142,6 +142,13 @@ class ONVIF {
   // momentary pulse clears once it has been seen (refs #5301).
   void observeAlarm() { alarm_.observe(); }
   bool isHealthy() const { return healthy_.load(std::memory_order_acquire); }
+  // triage-4860: counters for the periodic stats line.
+  std::atomic<uint64_t> stat_pulls{0};       // PullMessages calls
+  std::atomic<uint64_t> stat_messages{0};    // notification messages received
+  std::atomic<uint64_t> stat_failures{0};    // PullMessages errors (not timeouts)
+  std::atomic<uint64_t> stat_subscribes{0};  // Subscribe() calls
+  std::atomic<uint64_t> stat_wsa_fail{0};    // WaitForMessage returned early on a WS-Addressing failure
+  std::atomic<size_t> stat_alarms{0};        // entries in `alarms` after the last pull
   void setHealthy(bool p_healthy) { healthy_.store(p_healthy, std::memory_order_release); }
 #ifdef WITH_GSOAP
   void setNotes(Event::StringSet &noteSet) { SetNoteSet(noteSet); }

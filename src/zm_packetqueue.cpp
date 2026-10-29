@@ -24,6 +24,7 @@
 #include "zm_ffmpeg.h"
 #include "zm_packet.h"
 #include "zm_signal.h"
+#include "zm_utils.h"
 
 #include <algorithm>
 #include <climits>
@@ -569,6 +570,30 @@ void PacketQueue::clear() {
   } // end scope for lock_guard — mutex released here
   // packets_to_destroy goes out of scope here, destroying packets without holding the mutex
 }  // end void PacketQueue::clear()
+
+std::string PacketQueue::stats() {
+  std::unique_lock<std::mutex> lck(mutex);
+  size_t video = 0, keyframes = 0, bytes = 0, in_frames = 0, out_frames = 0, hw_frames = 0;
+  size_t images = 0, y_images = 0, analysis_images = 0, decoded = 0;
+  for (const auto &p : pktQueue) {
+    if (p->packet) bytes += p->packet->size;
+    if (p->packet && p->packet->stream_index == video_stream_id) {
+      video++;
+      if (p->keyframe) keyframes++;
+    }
+    if (p->in_frame) in_frames++;
+    if (p->out_frame) out_frames++;
+    if (p->hw_frame) hw_frames++;
+    if (p->image) images++;
+    if (p->y_image) y_images++;
+    if (p->analysis_image) analysis_images++;
+    if (p->decoded) decoded++;
+  }
+  return stringtf("queue packets=%zu video=%zu keyframes=%zu bytes=%zu decoded=%zu in_frames=%zu out_frames=%zu "
+                  "hw_frames=%zu images=%zu y_images=%zu analysis_images=%zu iterators=%zu max_kf_interval=%d",
+                  pktQueue.size(), video, keyframes, bytes, decoded, in_frames, out_frames, hw_frames,
+                  images, y_images, analysis_images, iterators.size(), max_keyframe_interval_.load());
+}
 
 unsigned int PacketQueue::size() {
   std::unique_lock<std::mutex> lck(mutex);

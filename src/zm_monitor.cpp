@@ -44,6 +44,11 @@
 #endif  // HAVE_LIBVNC
 
 #include <algorithm>
+#include <cinttypes>
+#if defined(__GLIBC__)
+#include <malloc.h>
+#endif
+#include <unistd.h>
 #include <chrono>
 #include <cstring>
 #include <sys/types.h>
@@ -2019,8 +2024,39 @@ void Monitor::CheckAction() {
   }
 }
 
+// triage-4860: every 300 s, one Info line per zmc with what it holds, so a log of a
+// growing process shows which of these grows with it.
+void Monitor::LogTriageStats() {
+  long vsz_pages = 0, rss_pages = 0;
+  if (::FILE *f = fopen("/proc/self/statm", "r")) {
+    if (fscanf(f, "%ld %ld", &vsz_pages, &rss_pages) != 2) vsz_pages = rss_pages = 0;
+    fclose(f);
+  }
+  long page_kb = sysconf(_SC_PAGESIZE) / 1024;
+  std::string heap = "heap n/a";
+#if defined(__GLIBC__) && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 33))
+  struct mallinfo2 mi = mallinfo2();
+  heap = stringtf("heap arena_kb=%zu inuse_kb=%zu free_kb=%zu mmap_kb=%zu mmap_n=%zu",
+                  mi.arena / 1024, mi.uordblks / 1024, mi.fordblks / 1024, mi.hblkhd / 1024, mi.hblks);
+#endif
+  std::string onvif_stats = "onvif off";
+  if (onvif) {
+    onvif_stats = stringtf("onvif pulls=%" PRIu64 " messages=%" PRIu64 " failures=%" PRIu64
+                           " subscribes=%" PRIu64 " wsa_fail=%" PRIu64 " alarms=%zu",
+                           onvif->stat_pulls.load(), onvif->stat_messages.load(), onvif->stat_failures.load(),
+                           onvif->stat_subscribes.load(), onvif->stat_wsa_fail.load(), onvif->stat_alarms.load());
+  }
+  Info("triage-4860 stats: rss_kb=%ld vsz_kb=%ld %s live_packets=%d decoder_queue=%zu %s %s",
+       rss_pages * page_kb, vsz_pages * page_kb, heap.c_str(), ZMPacket::live_count.load(),
+       decoder_queue_size_.load(), packetqueue.stats().c_str(), onvif_stats.c_str());
+}
+
 void Monitor::UpdateFPS() {
   SystemTimePoint now = std::chrono::system_clock::now();
+  if (now - last_triage_stats_time_ > Seconds(300)) {
+    if (last_triage_stats_time_.time_since_epoch() != Seconds(0)) LogTriageStats();
+    last_triage_stats_time_ = now;
+  }
   FPSeconds elapsed = now - last_fps_time;
 
   // If we are too fast, we get div by zero. This seems to happen in the case of audio packets.
@@ -3578,6 +3614,7 @@ std::list<ZMPacketLock>::iterator Monitor::MatchDecodedFrame(int64_t frame_pts) 
 }
 
 bool Monitor::Decode() {
+  decoder_queue_size_ = decoder_queue.size();
   AVCodecContext *context = GetVideoCodecContext();
   ZMPacketLock packet_lock;
   std::shared_ptr<ZMPacket> packet;

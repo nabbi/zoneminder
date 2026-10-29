@@ -100,6 +100,9 @@ class ZMPacket {
   explicit ZMPacket(ZMPacket &packet);
   ZMPacket();
   ~ZMPacket();
+  // triage-4860: ZMPacket objects alive in this process (queue, decoder_queue,
+  // event writers, anything else holding one).
+  static std::atomic<int> live_count;
 
   //AVFrame *get_out_frame(const AVCodecContext *ctx);
   AVFrame *get_out_frame(int width, int height, AVPixelFormat format);
